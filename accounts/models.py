@@ -28,7 +28,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-
 class Customer(models.Model):
     MEMBERSHIP_FREE = 'F'
     MEMBERSHIP_VIP = 'V'
@@ -48,3 +47,16 @@ class Customer(models.Model):
 
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
+
+
+class Address(models.Model):
+    name = models.CharField(max_length=100)
+    province = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    alley = models.CharField(max_length=255)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
