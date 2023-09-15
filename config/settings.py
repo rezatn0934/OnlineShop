@@ -126,4 +126,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_CACHE_TTL = 60 * 15
 AUTH_USER_MODEL = 'accounts.User'
