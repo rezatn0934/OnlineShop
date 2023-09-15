@@ -84,3 +84,40 @@ class UserLogin(APIView):
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
+
+class RefreshToken(APIView):
+    """
+    Refresh access and refresh tokens.
+
+    Endpoint: POST /api/auth/refresh/
+    Permission: IsAuthenticated (requires a valid access token)
+
+    This view allows users to refresh an expired access token by providing a valid refresh token.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing the refresh token.
+
+    Returns:
+        Response: A JSON response containing new access and refresh tokens along with appropriate status codes.
+    """
+
+    permission_classes = []
+
+    def post(self, request):
+        refresh_token = request.POST.get("refresh_token").encode("utf-8")
+        payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = JWTAuthentication.get_user_from_payload(payload)
+        jti = payload["jti"]
+        cache.delete(jti)
+
+        jti = jti_maker(request, user.id)
+        access_token = generate_access_token(user.id, jti)
+        refresh_token = generate_refresh_token(user.id, jti, settings.REDIS_CACHE_TTL)
+        cache.set(jti, 0, timeout=settings.REDIS_CACHE_TTL, version=None)
+
+        data = {
+            "access": access_token,
+            "refresh": refresh_token
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
+
