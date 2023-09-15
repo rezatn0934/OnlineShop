@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import Customer
 # Create your models here.
+from store.models import Product
 
 
 class Order(models.Model):
@@ -20,3 +21,14 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order{self.id}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='orderitems')
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return f"Order Details ID: {self.id}"
+    
