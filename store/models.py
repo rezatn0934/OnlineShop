@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 
 class Category(models.Model):
@@ -26,8 +28,9 @@ class Color(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     description = models.TextField(null=True, blank=True)
+    image = models.ImageField(verbose_name=_("Product Image"), upload_to='images/category/')
     price = models.DecimalField(
         max_digits=6,
         decimal_places=2,
@@ -39,9 +42,12 @@ class Product(models.Model):
     quantity = models.PositiveSmallIntegerField()
     is_active = models.BooleanField(default=True)
 
-    def __str__(self) -> str:
-        return self.name
+    def img_preview(self):
+        if self.image:
+            return mark_safe(f'<img src = "{self.image.url}" width = "150" height="150"/> ')
 
     class Meta:
         ordering = ['title']
 
+    def __str__(self) -> str:
+        return self.name
