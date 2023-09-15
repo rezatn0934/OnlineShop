@@ -10,7 +10,7 @@ class Order(models.Model):
     PAYMENT_STATUS_FAILED = 'F'
     PAYMENT_STATUS_CHOICES = [
         (PAYMENT_STATUS_PENDING, 'Pending'),
-        (PAYMENT_STATUS_COMPLETE, 'Paid'),
+        (PAYMENT_STATUS_COMPLETE, 'Complete'),
         (PAYMENT_STATUS_FAILED, 'Failed')
     ]
 

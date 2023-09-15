@@ -75,11 +75,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('NAME'),
+            'HOST': os.environ.get('HOST'),
+            'PORT': os.environ.get('PORT'),
+            'USER': os.environ.get('USER'),
+            'PASSWORD': os.environ.get('PASSWORD')
+        }
     }
-}
 
 
 # Password validation
@@ -122,3 +126,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_CACHE_TTL = 60 * 15
+AUTH_USER_MODEL = 'accounts.User'
