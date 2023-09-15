@@ -121,3 +121,32 @@ class RefreshToken(APIView):
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
+
+class LogoutView(APIView):
+    """
+    Log out a user by invalidating their token.
+
+    Endpoint: POST /api/auth/logout/
+    Permission: IsAuthenticated (requires a valid access token)
+
+    This view allows users to log out by invalidating their token.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing the access token.
+
+    Returns:
+        Response: A JSON response indicating successful logout or an error message along with appropriate status codes.
+    """
+
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            payload = request.auth
+            jti = payload["jti"]
+            cache.delete(jti)
+
+            return Response({"message": "Successful Logout"}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
