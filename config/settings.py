@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
@@ -38,6 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'django_filters',
+    'accounts',
+    'core',
+    'interaction',
+    'orders',
+    'store',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +139,9 @@ REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 REDIS_CACHE_TTL = 60 * 15
 AUTH_USER_MODEL = 'accounts.User'
+JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": "MY_SIGNING_KEY_123",
+}
