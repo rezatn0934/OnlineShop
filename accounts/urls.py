@@ -12,4 +12,6 @@ urlpatterns = [
     path("refresh/", views.RefreshToken.as_view(), name="refresh_token"),
     path("logout/", views.LogoutView.as_view(), name="logout"),
     path('profile/<int:pk>/', views.UserProfileDetailView.as_view(), name='user-profile-detail'),
+    path('user/<int:pk>/change_password/', views.UserProfileDetailView.as_view({'post': 'change_password'}),
+         name='user-set-password'),
 ]
