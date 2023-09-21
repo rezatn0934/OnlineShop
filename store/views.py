@@ -21,3 +21,8 @@ class ProductListView(ListAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
+
+class ProductDetail(RetrieveAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
