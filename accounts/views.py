@@ -3,16 +3,20 @@ from django.shortcuts import render
 # Create your views here.
 import jwt
 from django.conf import settings
+
 from django.core.cache import cache
 from rest_framework import status
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
+from .models import User
 from .authentication import AuthBackend, JWTAuthentication
 from .utils import generate_access_token, generate_refresh_token, jti_maker
-from .serilizers import UserRegisterSerializer, UserLoginSerializer
-
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, PasswordSerializer
+from .permisions import UserIsOwner
 access_token_lifetime = settings.JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
 refresh_token_lifetime = settings.JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()
 
@@ -150,3 +154,11 @@ class LogoutView(APIView):
             return Response({"message": "Successful Logout"}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileDetailView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated, UserIsOwner)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
