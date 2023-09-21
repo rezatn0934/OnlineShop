@@ -47,7 +47,7 @@ class Product(models.Model):
             return mark_safe(f'<img src = "{self.image.url}" width = "150" height="150"/> ')
 
     class Meta:
-        ordering = ['title']
+        ordering = ['name']
 
     def __str__(self) -> str:
         return self.name
