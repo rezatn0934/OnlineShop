@@ -12,7 +12,7 @@ from .filters import ProductFilter
 
 class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(is_active=True)
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
@@ -26,3 +26,4 @@ class ProductListView(ListAPIView):
 class ProductDetail(RetrieveAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+    lookup_field = 'slug'
