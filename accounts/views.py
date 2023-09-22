@@ -6,11 +6,12 @@ from django.conf import settings
 
 from django.core.cache import cache
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
 
 from .models import User
 from .authentication import AuthBackend, JWTAuthentication
@@ -156,7 +157,7 @@ class LogoutView(APIView):
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserProfileDetailView(RetrieveUpdateDestroyAPIView):
+class UserProfileDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated, UserIsOwner)
     serializer_class = UserSerializer
@@ -169,7 +170,7 @@ class UserProfileDetailView(RetrieveUpdateDestroyAPIView):
         if serializer.is_valid():
             user.set_password(serializer.validated_data['password'])
             user.save()
-            return Response({'status': 'password set'})
+            return Response({'status': 'password successfully changed'})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
