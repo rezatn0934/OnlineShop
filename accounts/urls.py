@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
+router.register('users', views.UserProfileDetailView, basename='users')
 
 app_name = 'accounts'
 urlpatterns = [
@@ -11,7 +12,6 @@ urlpatterns = [
     path("login/", views.UserLogin.as_view(), name="login"),
     path("refresh/", views.RefreshToken.as_view(), name="refresh_token"),
     path("logout/", views.LogoutView.as_view(), name="logout"),
-    path('profile/<int:pk>/', views.UserProfileDetailView.as_view(), name='user-profile-detail'),
-    path('user/<int:pk>/change_password/', views.UserProfileDetailView.as_view({'post': 'change_password'}),
-         name='user-set-password'),
 ]
+
+urlpatterns += router.urls
