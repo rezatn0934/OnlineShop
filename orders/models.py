@@ -1,3 +1,6 @@
+from uuid import uuid4
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from accounts.models import Customer
 # Create your models here.
@@ -31,4 +34,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"Order Details ID: {self.id}"
-    
+
+
+class Cart(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='cart')
+
+    @property
+    def total_price(self):
+        cart_items = self.items
+        cart_total_price = 0
+        for item in cart_items:
+            cart_total_price += item.total_price
+        return cart_total_price
