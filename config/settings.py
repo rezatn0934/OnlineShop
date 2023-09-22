@@ -84,15 +84,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('NAME'),
-            'HOST': os.environ.get('HOST'),
-            'PORT': os.environ.get('PORT'),
-            'USER': os.environ.get('USER'),
-            'PASSWORD': os.environ.get('PASSWORD')
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'HOST': 'postgres',
+        'PORT': os.environ.get('PORT'),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD')
     }
+}
 
 
 # Password validation
@@ -156,7 +156,6 @@ REST_FRAMEWORK = {
         'anon': '2/minute',
         'user': '5/minute'
     },
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
