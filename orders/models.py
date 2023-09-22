@@ -47,3 +47,22 @@ class Cart(models.Model):
         for item in cart_items:
             cart_total_price += item.total_price
         return cart_total_price
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(
+        Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1)]
+    )
+
+    @property
+    def total_price(self):
+        if self.product.price and self.quantity:
+            return self.product.price * self.quantity
+        else:
+            return 0
+
+    class Meta:
+        unique_together = [['cart', 'product']]
