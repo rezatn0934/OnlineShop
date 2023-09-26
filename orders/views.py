@@ -37,5 +37,5 @@ class CheckOutView(APIView):
             product.quantity -= cart_item.quantity
             product.save()
 
-        OrderItem.objects.bulc_create(order_details)
+        OrderItem.objects.bulk_create(order_details)
         Cart.objects.delete()
