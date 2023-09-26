@@ -19,8 +19,6 @@ class ProductListView(ListAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'description']
 
-    def get_serializer_context(self):
-        return {'request': self.request}
 
 
 class ProductDetail(RetrieveAPIView):
